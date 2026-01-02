@@ -1,3 +1,4 @@
+/* app/globals.css */
 @import "tailwindcss";
 
 :root {
@@ -18,9 +19,24 @@
     --foreground: #ededed;
   }
 }
+@layer components {
+  .navContainer {
+    @apply sticky top-0 z-50 bg-gradient-to-r from-blue-700 to-blue-500 p-4 shadow-lg;
+  }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  .mainTitle {
+    @apply text-4xl font-extrabold text-gray-900 mb-4 tracking-tight;
+  }
+
+  .mathButton {
+    @apply flex flex-col items-center justify-center p-8 rounded-2xl 
+          border-2 border-transparent bg-white shadow-xl 
+          transition-all duration-300 ease-in-out
+          hover:border-blue-500 hover:shadow-2xl hover:-translate-y-2
+          active:scale-95 text-blue-700 font-semibold text-center;
+  }
+
+  .buttonIcon {
+    @apply text-3xl mb-3 opacity-80;
+  }
 }
