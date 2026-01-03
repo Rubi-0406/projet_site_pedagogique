@@ -21,7 +21,7 @@
 }
 @layer components {
   .navContainer {
-    @apply sticky top-0 z-50 bg-gradient-to-r from-blue-700 to-blue-500 p-4 shadow-lg;
+    @apply sticky top-0 z-50 bg-gradient-to-r from-blue-700 to-blue-950 p-4 shadow-lg;
   }
 
   .mainTitle {
