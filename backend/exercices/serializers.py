@@ -1,29 +1,41 @@
 from rest_framework import serializers
-from .models import Category, Section, ExerciseAttempt
-
-class SectionSerializer(serializers.ModelSerializer):
-    """Transforme les sections (exercices) en JSON"""
+from rest_framework.serializers import ModelSerializer
+from .models import (
+    Category, 
+    Section, 
+    ExerciseAttempt
+)
+# Récupere les différentes sections associées
+class SectionSerializer(ModelSerializer):
     class Meta:
         model = Section
         fields = [
             'id', 
-            'order',
+            'section_num',
             'name', 
-            'slug', 
-            'theory_content', 
-            'python_example'
+            'icon',
+            'slug',
         ]
 
-class CategorySerializer(serializers.ModelSerializer):
-    """Transforme les catégories en JSON et inclut leurs sections"""
-    # On affiche la liste des sections à l'intérieur de la catégorie
+# On définit la Catégorie qui utilise le SectionSerializer
+class CategorySerializer(ModelSerializer):
+    # Cette ligne est CRUCIALE pour que 'sections' fonctionne dans fields
     sections = SectionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Category
         fields = ['id', 'name', 'icon', 'slug', 'chapter_num', 'sections']
 
-class ExerciseAttemptSerializer(serializers.ModelSerializer):
+
+# Récupere les différentes section avec les détails de sa catégorie
+class SectionDetailSerializer(ModelSerializer):
+    category_chapter_num = serializers.IntegerField(source='category.chapter_num', read_only=True)
+
+    class Meta:
+        model = Section
+        fields = ['id', 'section_num', 'name', 'icon', 'slug', 'category_chapter_num']
+
+class ExerciseAttemptSerializer(ModelSerializer):
     """Pour envoyer les résultats des exercices au backend"""
     class Meta:
         model = ExerciseAttempt

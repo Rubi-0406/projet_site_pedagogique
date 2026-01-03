@@ -2,12 +2,12 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from exercices.views import (
     GetCategory,
-    SectionViewSet,
+    GetSection,
 )
 
 router = DefaultRouter()
 router.register(r'get_category', GetCategory, basename='get_category')
-router.register(r'get_section', SectionViewSet, basename='get_section')
+router.register(r'get_section', GetSection, basename='get_section')
 
 
 urlpatterns = [

@@ -10,10 +10,11 @@ class Category(models.Model):
         return self.name
 
 class Section(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='sections')
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL,null=True, blank=True, related_name='sections')
+    section_num = models.IntegerField(default=0)
     name = models.CharField(max_length=100) # ex: Chiffrement César
-    slug = models.SlugField()
-    order = models.IntegerField(default=0)
+    icon = models.CharField(max_length=10, default='📄')   # ex: 📄
+    slug = models.SlugField(unique=True)
     
     # Pour la partie théorie
     theory_content = models.TextField(blank=True) # Texte en Markdown
