@@ -1,4 +1,3 @@
-from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 from .models import (
     Category, 
@@ -26,15 +25,26 @@ class CategorySerializer(ModelSerializer):
         model = Category
         fields = ['id', 'name', 'icon', 'slug', 'chapter_num', 'sections']
 
+# Un serializer léger pour les infos de base de la catégorie
+class CategoryMinimalSerializer(ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['id', 'chapter_num', 'name', 'icon']
 
-# Récupere les différentes section avec les détails de sa catégorie
 class SectionDetailSerializer(ModelSerializer):
-    category_chapter_num = serializers.IntegerField(source='category.chapter_num', read_only=True)
+    # On utilise le serializer léger ici
+    category = CategoryMinimalSerializer(read_only=True)
 
     class Meta:
         model = Section
-        fields = ['id', 'section_num', 'name', 'icon', 'slug', 'category_chapter_num']
-
+        fields = [
+            'id', 
+            'section_num', 
+            'name', 
+            'icon', 
+            'slug', 
+            'category'
+        ]
 class ExerciseAttemptSerializer(ModelSerializer):
     """Pour envoyer les résultats des exercices au backend"""
     class Meta:
