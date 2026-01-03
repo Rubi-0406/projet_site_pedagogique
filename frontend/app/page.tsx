@@ -1,16 +1,46 @@
 //page.tsx
 
+"use client"; // Obligatoire car on utilise du state
+import { useEffect, useState } from "react";
 import Link from "next/link";
 
+
+interface Section {
+  id: number;
+  name: string;
+  slug: string;
+}
+
+interface Category {
+  id: number;
+  name: string;
+  icon: string;
+  slug: string;
+  chapter_num: number;
+  sections: Section[];
+}
+
+const apiUrl = process.env.NEXT_PUBLIC_API_URL as string;
+
 export default function HomePage() {
-  const categories = [
-  { name: "Théorie des ensembles", icon: "🌀", slug: "ensembles", chapter_num: 1 }, 
-  { name: "Logique mathématique", icon: "🧠", slug: "logique", chapter_num: 2 }, 
-  { name: "Algèbre linéaire", icon: "🔢", slug: "algebre", chapter_num: 3 },     
-  { name: "Théorie des graphes", icon: "🕸️", slug: "graphes", chapter_num: 4 },  
-  { name: "Sécurité informatique", icon: "🛡️", slug: "securite", chapter_num: 5 },  
-  { name: "J'ai de la chance (exo aléatoire)", icon: "🍀", slug: "chance", chapter_num: 6 }  
-];
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Appel à ton API Django
+    fetch(`${apiUrl}/api/get_category/`)
+      .then((res) => res.json())
+      .then((data) => {
+        setCategories(data);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Erreur lors de la récupération des catégories:", error);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) return <div className="p-8 text-center">Chargement des cours...</div>;
 
   return (
     <div className="min-h-screen bg-slate-50">
