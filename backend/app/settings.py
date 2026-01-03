@@ -33,7 +33,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    "exercices.apps.ExercicesConfig",
+    "exercices",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

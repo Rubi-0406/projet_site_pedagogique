@@ -1,10 +1,10 @@
 from django.db import models
 
 class Category(models.Model):
+    chapter_num = models.IntegerField(default=0)
     name = models.CharField(max_length=100) # ex: Sécurité informatique
     icon = models.CharField(max_length=10)   # ex: 🛡️
     slug = models.SlugField(unique=True)     # ex: securite
-    order = models.IntegerField(default=0)
 
     def __str__(self):
         return self.name

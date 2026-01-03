@@ -4,12 +4,12 @@ import Link from "next/link";
 
 export default function HomePage() {
   const categories = [
-  { name: "Théorie des ensembles", icon: "🌀", slug: "ensembles" }, 
-  { name: "Logique mathématique", icon: "🧠", slug: "logique" }, 
-  { name: "Algèbre linéaire", icon: "🔢", slug: "algebre" },     
-  { name: "Théorie des graphes", icon: "🕸️", slug: "graphes" },  
-  { name: "Sécurité informatique", icon: "🛡️", slug: "securite" },  
-  { name: "J'ai de la chance (exo aléatoire)", icon: "🍀", slug: "chance" }  
+  { name: "Théorie des ensembles", icon: "🌀", slug: "ensembles", chapter_num: 1 }, 
+  { name: "Logique mathématique", icon: "🧠", slug: "logique", chapter_num: 2 }, 
+  { name: "Algèbre linéaire", icon: "🔢", slug: "algebre", chapter_num: 3 },     
+  { name: "Théorie des graphes", icon: "🕸️", slug: "graphes", chapter_num: 4 },  
+  { name: "Sécurité informatique", icon: "🛡️", slug: "securite", chapter_num: 5 },  
+  { name: "J'ai de la chance (exo aléatoire)", icon: "🍀", slug: "chance", chapter_num: 6 }  
 ];
 
   return (
@@ -28,7 +28,7 @@ export default function HomePage() {
           {categories.map((cat, index) => (
             <Link href={`/exercices/${cat.slug}`} key={index}>
               <div className="mathButton cursor-pointer hover:scale-105 transition-transform">
-                <span className="buttonIcon">{cat.icon}</span>
+                Chapitre {cat.chapter_num} <span className="buttonIcon">{cat.icon}</span>
                 {cat.name}
               </div>
             </Link>
