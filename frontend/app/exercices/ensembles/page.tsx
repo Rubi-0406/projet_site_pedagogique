@@ -10,11 +10,11 @@ export default function ExercicePage() {
   const content = {
     title: "Théorie des ensembles 🌀",
     sections: [
-      "Opérations sur les ensembles",
-      "Sous-ensembles et relations",
-      "Implémentation de propriétés relationnelles",
-      "Les types de relations",
-      "J'ai de la chance (exercice aléatoire)",
+      "Opérations sur les ensembles", 
+      "Sous-ensembles et relations", 
+      "Implémentation de propriétés relationnelles", 
+      "Les types de relations", 
+      "J'ai de la chance (exercice aléatoire)", 
     ]
   };
 

@@ -5,11 +5,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 
 
-interface Section {
-  id: number;
-  name: string;
-  slug: string;
-}
 
 interface Category {
   id: number;
@@ -17,7 +12,6 @@ interface Category {
   icon: string;
   slug: string;
   chapter_num: number;
-  sections: Section[];
 }
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL as string;
@@ -56,7 +50,7 @@ export default function HomePage() {
         {/* Grille de boutons */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {categories.map((cat, index) => (
-            <Link href={`/exercices/${cat.slug}`} key={index}>
+            <Link href={`/exercices/section_liste?category_id=${cat.id}`} key={index}>
               <div className="mathButton cursor-pointer hover:scale-105 transition-transform">
                 Chapitre {cat.chapter_num} <span className="buttonIcon">{cat.icon}</span>
                 {cat.name}

@@ -10,12 +10,12 @@ export default function ExercicePage() {
   const content = {
     title: "Sécurité Informatique 🛡️",
     sections: [
-        { name: "Chiffrement César", slug: "cesar" },
-        { name: "Chiffrement de Vigenère", slug: "vigenere" },
-        { name: "Indice de coïncidence (IC)", slug: "ic" },
-        { name: "Cryptographie symétrique: AES", slug: "aes" },
-        { name: "Cryptographie asymétrique: RSA", slug: "rsa" },
-        { name: "J'ai de la chance", slug: "chance" },
+        { name: "Chiffrement César", slug: "cesar" },  
+        { name: "Chiffrement de Vigenère", slug: "vigenere" }, 
+        { name: "Indice de coïncidence (IC)", slug: "ic" }, 
+        { name: "Cryptographie symétrique: AES", slug: "aes" }, 
+        { name: "Cryptographie asymétrique: RSA", slug: "rsa" }, 
+        { name: "J'ai de la chance", slug: "chance" }, 
     ]
   };
 
