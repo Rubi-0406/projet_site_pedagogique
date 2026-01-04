@@ -23,6 +23,16 @@ class Section(models.Model):
     def __str__(self):
         return f"{self.category.name} - {self.name}"
 
+class WordBank(models.Model):
+    word = models.CharField(max_length=100, unique=True)
+    difficulty = models.IntegerField(default=1)
+    
+    # Un mot peut appartenir à plusieurs catégories
+    categories = models.ManyToManyField(Category, related_name='words', blank=True)
+
+    def __str__(self):
+        return self.word
+    
 class ExerciseAttempt(models.Model):
     # Utile si vous voulez des stats (même sans compte élève, pour l'admin)
     section = models.ForeignKey(Section, on_delete=models.CASCADE)

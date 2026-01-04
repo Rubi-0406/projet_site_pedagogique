@@ -1,0 +1,43 @@
+import random
+from .models import WordBank
+
+class ExerciseGenerator:
+    @staticmethod
+    def generate_cesar():
+        # On simule la wordsList qui était en front
+        words = ["ALGORITHME", "VARIABLE", "FONCTION", "MATRICE", "VECTEUR", "LOGIQUE", "ENSEMBLE", "GRAPHE", "RESEAU", "SECURITE","CRYPTOGRAPHIE", "PROCESSEUR", "MEMOIRE", "DONNEES", "SERVEUR", "CLIENT", "INTERFACE", "COMPILATEUR", "EXECUTION", "BOOLEEN","ENTIER", "REEL", "COMPLEXE", "SYMETRIE", "ASYNCHRONE", "RECURSIVITE", "ITERATION", "CONDITION", "BOUCLE", "CLASSE","OBJET", "HERITAGE", "POLYMORPHISME", "ENCAPSULATION", "STRUCTURE", "POINTEUR", "ADRESSE", "FLUX", "OCTET", "BINAIRE","HEXADECIMAL", "PROTOCOLE", "ROUTAGE", "PAQUET", "DERIVEE", "INTEGRALE", "PUISSANCE", "RACINE", "EQUATION", "INCONNUE","SYSTEME", "PROBABILITE", "STATISTIQUE", "VARIANCE", "COVARIANCE", "CORRELATION", "DISTRIBUTION", "ECHANTILLON", "ESTIMATION", "HYPOTHESE",
+            "OPTIMISATION", "GRADIENT", "CONVERGENCE", "DIVERGENCE", "CONTINUITE", "DERIVABILITE", "PRIMITIVE", "ASYMPTOTE", "TANGENTE", "COURBURE","INTERVALLE", "DOMAINE", "IMAGE", "INJECTION", "SURJECTION", "BIJECTION", "CARDINAL", "DIMENSION", "BASE", "NOYAU","ORTHOGONAL", "PROJECTEUR", "DIAGONALE", "TRACE", "DETERMINANT", "INVERSION", "TRANSPOSITION", "ADJOINTE", "VALEUR", "PROPRE","POLYNOME", "RACINE", "FACTORISATION", "DIVISION", "EUCLIDIENNE", "CONGRUENCE", "MODULO", "PREMIER", "PGCD", "PPCM","COMBINATOIRE", "PERMUTATION", "ARRANGEMENT", "FACTORIELLE", "BINOMIAL", "PROFIL", "VULNERABILITE", "HACKER", "PAREFEU", "ANTIVIRUS","CHIFFREMENT", "DECHIFFREMENT", "SIGNATURE", "CERTIFICAT", "AUTHENTIFICATION", "AUTORISATION", "SESSION", "COOKIE", "JETON", "PROTOCOLE",
+            "HYDROGENE", "CARBONE", "OXYGENE", "AZOTE", "ELECTRON", "PROTON", "NEUTRON", "ATOME", "MOLECULE", "CELLULE","GENETIQUE", "EVOLUTION", "ENERGIE", "FORCE", "VITESSE", "ACCELERATION", "MASSE", "POIDS", "GRAVITE", "ORBITE","SATELLITE", "GALAXIE", "UNIVERS", "PLANETE", "ETOILE", "SYSTEME", "SOLAIRE", "ATMOSPHERE", "PRESSION", "TEMPERATURE","CHALEUR", "LUMIERE", "OPTIQUE", "PRISME", "LENTILLE", "MIROIR", "REFLEXION", "REFRACTION", "DIFFRACTION", "FREQUENCE","AMPLITUDE", "PERIODE", "SIGNAL", "NUMERIQUE", "ANALOGIQUE", "MODULATION", "DEMODULATION", "ANTENNE", "ONDULATEUR", "BATTERIE","CIRCUIT", "RESISTANCE", "CAPACITE", "INDUCTANCE", "DIODE", "TRANSISTOR", "COURANT", "TENSION", "PUISSANCE", "IMPEDANCE",
+            "RESONANCE", "HARMONIQUE", "FILTRE", "AMPLIFICATEUR", "OSCILLATEUR", "SYNCHRONISATION", "HORLOGE", "REGISTRE", "CACHE", "PIPELINE","PARALLELISME", "DISTRIBUE", "CLOUD", "VIRTUALISATION", "CONTENEUR", "DOCKER", "KUBERNETES", "DATABASE", "REQUETE", "INDEX","TRANSACTION", "VERROU", "COLONNE", "LIGNE", "JOINTURE", "AGREGATION", "SCHEMA", "MIGRATION", "SCRIPT", "AUTOMATISATION","DEPLOIEMENT", "PRODUCTION", "DEVELOPPEMENT", "TEST", "DEBUGAGE", "PROFILAGE", "REFACTORISATION", "MAINTENANCE", "DOCUMENTATION", "AGILE","SCRUM", "KANBAN", "BACKLOG", "SPRINT", "VELOCITE", "UTILISATEUR", "EXPERIENCE", "ACCESSIBILITE", "ERGONOMIE", "DESIGN","COULEUR", "POLICE", "GRILLE", "COMPOSANT", "FRAMEWORK", "BIBLIOTHEQUE", "API", "REST", "GRAPHQL", "JSON","MARKUP", "STYLE", "SCRIPTING", "MOTEUR", "NAVIGATEUR", "RECHERCHE", "ALGORITHME", "CLASSEMENT", "PERFORMANCE", "LATENCE","BANDE", "PASSANTE", "DEBIT", "TRANSFERT", "TELECHARGEMENT", "UPLOAD", "SYNCHRONISATION", "PARTAGE", "STOCKAGE", "DISQUE"
+        ]
+        word = random.choice(words)
+        shift = random.choice([x for x in range(-13, 14) if x != 0])
+        
+        # L'output JSON que le Front va recevoir
+        return {
+            "word": word,
+            "shift": shift
+        }
+
+class AnswerGenerator:
+    @staticmethod
+    def answer_cesar(word, shift):
+        """
+        Calcule la réponse correcte pour un mot et un décalage donnés.
+        """
+        result = ""
+        
+        for char in word:
+            # On récupère la position de la lettre (A=0, B=1, ..., Z=25)
+            # ord(char) donne le code ASCII, ord('A') est la base 65
+            position = ord(char) - ord('A')
+            
+            # Formule mathématique du Chiffrement de César : 
+            # (Position + Décalage) MODULO 26
+            new_position = (position + shift) % 26
+            
+            # On convertit la nouvelle position en lettre majuscule
+            new_char = chr(new_position + ord('A'))
+            result += new_char
+            
+        return result
