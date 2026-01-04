@@ -15,6 +15,7 @@ interface Section {
         name: string;
         icon: string;
         chapter_num: number;
+        slug: string;
     };
 }
 
@@ -60,7 +61,7 @@ export default function ExercicePage() {
 
             <div className="flex flex-col gap-4 w-full max-w-md mx-auto">
                 {sections.map((section) => (
-                    <Link href={`/exercices/${categoryInfo.id}/${section.slug}`} key={section.id}>
+                    <Link href={`/exercices/calcul_unique`} key={section.id}>
                         <div className="flex justify-between items-center p-6 bg-white border-2 border-slate-200 rounded-2xl hover:border-blue-500 hover:bg-blue-50 transition-all group shadow-sm cursor-pointer">
                             <span className="font-semibold text-lg text-slate-700 group-hover:text-blue-600">
                                 {section.section_num}. {section.name}
