@@ -10,7 +10,14 @@ export default function ExercicePage() {
   const content = {
     title: "Théorie des graphes 🕸️",
     sections: [
-        "Représentation des graphes",
+        "Fondamentaux des graphes",
+        "Mouvements dans les graphes",
+        "Types de graphes",
+        "Connexité",
+        "Arbres",
+        "Ordonnancement",
+        "Algorithmes fondamentaux sur les graphes",
+        "J'ai de la chance (exercice aléatoire)",
     ]
   };
 

@@ -10,11 +10,10 @@ export default function ExercicePage() {
   const content = {
     title: "Logique Mathématique 🧠",
     sections: [
-        "Propositions et connecteurs logiques",
+        "Valeur de vérité",
         "Tables de vérité",
-        "Équivalences logiques",
-        "Quantificateurs",
-        "Arguments et validité",
+        "Lois de De Morgan",
+        "Raisonnement logique",
         "J'ai de la chance (exercice aléatoire)",
     ]
   };
