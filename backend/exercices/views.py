@@ -49,31 +49,27 @@ class GetPostExercice(viewsets.ReadOnlyModelViewSet):
 
     @action(detail=True, methods=['post'])
     def check_answer(self, request, slug=None):
-        # 1. Récupération sécurisée des données
-        user_answer = request.data.get('answer', '').upper().strip()
-        params = request.data.get('params') 
-        
-        # 2. Vérification si params est présent
-        if not params or not isinstance(params, dict):
-            return Response({"error": "Données 'params' manquantes ou invalides"}, status=400)
-        
-        word = params.get('word')
-        shift = params.get('shift')
+        # On récupère les données du JSON envoyé
+        data = request.data
+        user_answer = data.get('answer', '').upper().strip()
+        word = data.get('word')
+        shift = data.get('shift')
 
-        # 3. Vérification des valeurs individuelles
-        if word is None or shift is None:
-            return Response({"error": "Le mot original ou le décalage est manquant"}, status=400)
-        
-        # Calcul et comparaison
-        correct_word = AnswerGenerator.answer_cesar(word, int(shift))
-        
-        if user_answer == correct_word:
+        # Validation de sécurité
+        if not word or shift is None:
+            return Response({"error": "Champs 'word' et 'shift' requis"}, status=400)
+
+        try:
+            # Calcul de la réponse attendue côté serveur
+            correct_word, steps = AnswerGenerator.answer_cesar(word, int(shift))
+            
+            is_correct = (user_answer == correct_word)
+            
             return Response({
-                "correct": True, 
-                "message": "Félicitations ! C'est la bonne réponse."
+                "correct": is_correct, 
+                "message": "✅ Correct !" if is_correct else f"❌ Incorrect. La réponse était {correct_word}",
+                "explanation": steps 
             })
-        else:
-            return Response({
-                "correct": False, 
-                "message": f"Dommage ! La réponse était {correct_word}."
-            })
+        except Exception as e:
+            # Capture l'erreur précise pour le debug
+            return Response({"error": str(e)}, status=500)

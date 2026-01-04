@@ -22,22 +22,19 @@ class ExerciseGenerator:
 class AnswerGenerator:
     @staticmethod
     def answer_cesar(word, shift):
-        """
-        Calcule la réponse correcte pour un mot et un décalage donnés.
-        """
+        steps = []
         result = ""
+        word = word.upper()
         
         for char in word:
-            # On récupère la position de la lettre (A=0, B=1, ..., Z=25)
-            # ord(char) donne le code ASCII, ord('A') est la base 65
-            position = ord(char) - ord('A')
-            
-            # Formule mathématique du Chiffrement de César : 
-            # (Position + Décalage) MODULO 26
-            new_position = (position + shift) % 26
-            
-            # On convertit la nouvelle position en lettre majuscule
-            new_char = chr(new_position + ord('A'))
-            result += new_char
-            
-        return result
+            if char.isalpha():
+                # Formule : (Position + Décalage) % 26
+                code_orig = ord(char) - 65
+                new_code = (code_orig + shift) % 26
+                char_res = chr(new_code + 65)
+                
+                steps.append(f"{char} → {char_res}")
+                result += char_res
+            else:
+                result += char
+        return result, steps
