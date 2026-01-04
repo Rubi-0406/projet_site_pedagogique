@@ -29,7 +29,7 @@ class CategorySerializer(ModelSerializer):
 class CategoryMinimalSerializer(ModelSerializer):
     class Meta:
         model = Category
-        fields = ['id', 'chapter_num', 'name', 'icon']
+        fields = ['id', 'chapter_num', 'name','slug', 'icon']
 
 class SectionDetailSerializer(ModelSerializer):
     # On utilise le serializer léger ici
