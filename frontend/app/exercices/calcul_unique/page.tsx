@@ -3,64 +3,81 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
+const apiUrl = process.env.NEXT_PUBLIC_API_URL as string;
+
 export default function CesarExercise() {
   const router = useRouter();
   
   // États pour l'exercice
-  const [word, setWord] = useState("");
-  const [shift, setShift] = useState(0);
+  const [exerciseData, setExerciseData] = useState<{ word: string; shift: number ,answer: string} | null>(null);
   const [userResponse, setUserResponse] = useState("");
-  const [showResult, setShowResult] = useState(false);
-  const [isCorrect, setIsCorrect] = useState(false);
+  const [loading, setLoading] = useState(false);
+  
+  // États pour le résultat du backend
+  const [result, setResult] = useState<{ correct: boolean; message: string, explanation: string[] } | null>(null);
 
-  const wordsList = ["SECURITE", "RESEAU", "CRYPTO", "ALGORITHME", "DONNEES", "VULNERABILITE", "CLEF"];
-
-  // Fonction pour générer un exercice
-  const generateExercise = () => {
-    const randomWord = wordsList[Math.floor(Math.random() * wordsList.length)];
-    const randomShift = Math.floor(Math.random() * 11) - 5; // Entre -5 et +5
-    setWord(randomWord);
-    setShift(randomShift === 0 ? 3 : randomShift); // Éviter un décalage de 0
+  // 1. Appeler le backend pour générer l'exercice
+  const fetchNewExercise = async () => {
+    setLoading(true);
+    setResult(null);
     setUserResponse("");
-    setShowResult(false);
+    try {
+      const res = await fetch(`${apiUrl}/api/get_post_exercice/cesar/get_exercise/`);
+      const data = await res.json();
+      setExerciseData(data); // Reçoit { word: "...", shift: ... }
+    } catch (error) {
+      console.error("Erreur lors de la récupération:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Générer le premier exercice au chargement
   useEffect(() => {
-    generateExercise();
+    fetchNewExercise();
   }, []);
 
-  // Fonction de chiffrement pour la correction
-  const encryptCesar = (text: string, s: number) => {
-    return text
-      .split("")
-      .map((char) => {
-        const code = char.charCodeAt(0);
-        // On gère uniquement les majuscules A-Z (65-90)
-        let shifted = ((code - 65 + s) % 26);
-        if (shifted < 0) shifted += 26; // Gérer les décalages négatifs
-        return String.fromCharCode(shifted + 65);
-      })
-      .join("");
+  // 2. Envoyer la réponse au backend pour vérification
+  const handleCheckAnswer = async () => {
+    if (!exerciseData) return;
+
+    try {
+      const res = await fetch(`${apiUrl}/api/get_post_exercice/cesar/check_answer/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            answer: userResponse,      // Ce que l'utilisateur a écrit
+            word: exerciseData.word,   // Le mot à chiffrer
+            shift: exerciseData.shift, // Le décalage utilisé
+        }),
+      });
+
+      const data = await res.json();
+      setResult(data); // Reçoit { correct: boolean, message: "..." }
+    } catch (error) {
+      console.error("Erreur lors de la vérification:", error);
+    }
   };
 
-  const checkAnswer = () => {
-    const correctAnswer = encryptCesar(word, shift);
-    setIsCorrect(userResponse.toUpperCase().trim() === correctAnswer);
-    setShowResult(true);
-  };
+  if (!exerciseData && loading) return <div className="p-8 text-center">Chargement...</div>;
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[80vh] container mx-auto p-6 text-center">
       <h2 className="text-3xl font-bold mb-6 text-blue-700">Chiffrement de César 🔐</h2>
 
       <div className="bg-white p-8 rounded-3xl shadow-xl border-2 border-slate-100 max-w-lg w-full">
-        <p className="text-lg mb-4">
-          Chiffre le mot suivant avec un décalage de <span className="font-bold text-blue-600">{shift > 0 ? `+${shift}` : shift}</span> :
-        </p>
-        <p className="text-4xl font-mono font-black tracking-widest mb-8 text-slate-800">
-          {word}
-        </p>
+        {exerciseData && (
+          <>
+            <p className="text-lg mb-4">
+              Chiffre le mot suivant avec un décalage de : 
+              <span className="font-bold text-blue-600 ml-2">
+                {exerciseData.shift > 0 ? `+${exerciseData.shift}` : exerciseData.shift}
+              </span>
+            </p>
+            <p className="text-4xl font-mono font-black tracking-widest mb-8 text-slate-800">
+              {exerciseData.word}
+            </p>
+          </>
+        )}
 
         <input
           type="text"
@@ -71,32 +88,35 @@ export default function CesarExercise() {
         />
 
         <button
-          onClick={checkAnswer}
-          className="w-full bg-blue-600 text-white py-4 rounded-xl font-bold hover:bg-blue-700 transition"
+          onClick={handleCheckAnswer}
+          disabled={loading}
+          className="w-full bg-blue-600 text-white py-4 rounded-xl font-bold hover:bg-blue-700 transition disabled:bg-gray-400"
         >
-          Vérifier la réponse
+          {loading ? "Vérification..." : "Vérifier la réponse"}
         </button>
 
-        {showResult && (
-          <div className={`mt-6 p-4 rounded-xl text-left ${isCorrect ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}>
-            <p className="font-bold text-lg mb-2">
-              {isCorrect ? "✅ Bravo ! C'est correct." : "❌ Dommage, ce n'est pas ça."}
-            </p>
-            <div className="text-sm">
-              <p className="font-semibold underline">Explication :</p>
-              <ul className="list-disc ml-5 mt-2">
-                {word.split("").map((letter, i) => (
-                  <li key={i}>{letter} → {encryptCesar(letter, shift)}</li>
-                ))}
-              </ul>
-              <p className="mt-2 font-bold">Le mot final était : {encryptCesar(word, shift)}</p>
-            </div>
-          </div>
-        )}
+{/* Vérification que result existe ET que explanation existe */}
+{result && result.explanation && (
+  <div className={`mt-6 p-4 rounded-xl text-left ${result.correct ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}>
+    <p className="font-bold text-lg mb-2">
+      {result.message}
+    </p>
+    <div className="mt-4 border-t border-current pt-2">
+      <p className="font-semibold underline">Détails du calcul :</p>
+      <ul className="grid grid-cols-2 gap-x-4 mt-2 font-mono text-sm">
+        {result.explanation.map((step, index) => (
+          <li key={index} className="ml-4 list-disc">
+            {step}
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+)}
 
         <button
-          onClick={generateExercise}
-          className="mt-6 text-blue-600 font-medium hover:underline"
+          onClick={fetchNewExercise}
+          className="mt-6 text-blue-600 font-medium hover:underline flex items-center justify-center gap-2 mx-auto"
         >
           Générer un autre mot 🎲
         </button>

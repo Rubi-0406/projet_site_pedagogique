@@ -24,6 +24,7 @@ services:
       - /app/node_modules
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:8000/
+      #- NEXT_PUBLIC_API_URL=http://192.168.188.69:8000/
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
       
